@@ -17,6 +17,58 @@ html, body {
   text-decoration: none;
 }
 
+// Create Content Form
+.form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form input[type="text"],
+.form textarea,
+.form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.form input[type="file"] {
+  border: none;
+  padding: 0;
+}
+
+.form button {
+  padding: 10px 15px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.form button:hover {
+  background-color: #00408b;
+}
+
 // Content
 .content {
   flex-direction: column;

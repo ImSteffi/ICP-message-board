@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { message_board_backend } from 'declarations/message-board-backend';
 import Navbar from '../components/Navbar';
+import CreateContentForm from '../components/Content/CreateContent.jsx';
 import Content from '../components/Content/Content.jsx';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   return (
     <main>
       <Navbar />
+      <CreateContentForm />
       <Content />
     </main>
   );
