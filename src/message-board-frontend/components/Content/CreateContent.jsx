@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { message_board_backend as canister } from "../../../declarations/message-board-backend";
 
-function CreateContentForm({ deployNewPost }) {
+function CreateContentForm({ deployNewPost, hasPosts }) {
   const [errors, setErrors] = useState({
     title: false,
     description: false,
@@ -39,7 +39,6 @@ function CreateContentForm({ deployNewPost }) {
       !formData.content ||
       !formData.category
     ) {
-      console.error("Error submitting form data: All fields must be filled.");
       return;
     }
     try {
@@ -80,7 +79,7 @@ function CreateContentForm({ deployNewPost }) {
           placeholder="Title"
           value={formData.title}
           onChange={handleInputChange}
-          className={errors.title ? 'error' : ''}
+          className={errors.title ? "error" : ""}
         />
         <input
           type="text"
@@ -88,20 +87,20 @@ function CreateContentForm({ deployNewPost }) {
           placeholder="Description"
           value={formData.description}
           onChange={handleInputChange}
-          className={errors.description ? 'error' : ''}
+          className={errors.description ? "error" : ""}
         />
         <textarea
           name="content"
           placeholder="Content"
           value={formData.content}
           onChange={handleInputChange}
-          className={errors.content ? 'error' : ''}
+          className={errors.content ? "error" : ""}
         />
         <select
           name="category"
           value={formData.category}
           onChange={handleInputChange}
-          className={errors.category ? 'error' : ''}
+          className={errors.category ? "error" : ""}
         >
           <option value="">Select a Category</option>
           <option value="news">News</option>
@@ -109,9 +108,11 @@ function CreateContentForm({ deployNewPost }) {
           <option value="technology">Technology</option>
         </select>
         <button type="submit">Submit</button>
-        <button type="button" onClick={handleDeleteAll}>
-          Delete All Posts
-        </button>
+        {hasPosts && (
+          <button type="button" onClick={handleDeleteAll} disabled={!hasPosts}>
+            Delete All Posts
+          </button>
+        )}
       </form>
     </div>
   );

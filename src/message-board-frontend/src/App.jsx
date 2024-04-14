@@ -31,7 +31,7 @@ function App() {
   return (
     <main>
       <Navbar />
-      <CreateContentForm deployNewPost={fetchPosts} />
+      <CreateContentForm deployNewPost={fetchPosts} hasPosts={posts.length > 0 }/>
       <Content posts={posts} />
     </main>
   );
