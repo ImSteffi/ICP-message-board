@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { message_board_backend as canister } from "../../../declarations/message-board-backend";
 
-function CreateContentForm({ onNewPost }) {
+function CreateContentForm({ deployNewPost }) {
+  const [errors, setErrors] = useState({
+    title: false,
+    description: false,
+    content: false,
+    category: false,
+  });
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -19,11 +26,48 @@ function CreateContentForm({ onNewPost }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const newErrors = {
+      title: !formData.title,
+      description: !formData.description,
+      content: !formData.content,
+      category: !formData.category,
+    };
+    setErrors(newErrors);
+    if (
+      !formData.title ||
+      !formData.description ||
+      !formData.content ||
+      !formData.category
+    ) {
+      console.error("Error submitting form data: All fields must be filled.");
+      return;
+    }
     try {
       await canister.addFormData(formData);
-      onNewPost();
+      deployNewPost();
+      setFormData({
+        title: "",
+        description: "",
+        content: "",
+        category: "",
+      });
+      setErrors({
+        title: false,
+        description: false,
+        content: false,
+        category: false,
+      });
     } catch (error) {
       console.error("Error submitting form data:", error);
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    try {
+      await canister.clearAllPosts();
+      deployNewPost();
+    } catch (error) {
+      console.error("Error deleting all posts:", error);
     }
   };
 
@@ -36,6 +80,7 @@ function CreateContentForm({ onNewPost }) {
           placeholder="Title"
           value={formData.title}
           onChange={handleInputChange}
+          className={errors.title ? 'error' : ''}
         />
         <input
           type="text"
@@ -43,17 +88,20 @@ function CreateContentForm({ onNewPost }) {
           placeholder="Description"
           value={formData.description}
           onChange={handleInputChange}
+          className={errors.description ? 'error' : ''}
         />
         <textarea
           name="content"
           placeholder="Content"
           value={formData.content}
           onChange={handleInputChange}
+          className={errors.content ? 'error' : ''}
         />
         <select
           name="category"
           value={formData.category}
           onChange={handleInputChange}
+          className={errors.category ? 'error' : ''}
         >
           <option value="">Select a Category</option>
           <option value="news">News</option>
@@ -61,6 +109,9 @@ function CreateContentForm({ onNewPost }) {
           <option value="technology">Technology</option>
         </select>
         <button type="submit">Submit</button>
+        <button type="button" onClick={handleDeleteAll}>
+          Delete All Posts
+        </button>
       </form>
     </div>
   );

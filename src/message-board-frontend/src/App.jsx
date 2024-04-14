@@ -31,7 +31,7 @@ function App() {
   return (
     <main>
       <Navbar />
-      <CreateContentForm onNewPost={fetchPosts} />
+      <CreateContentForm deployNewPost={fetchPosts} />
       <Content posts={posts} />
     </main>
   );

@@ -28,4 +28,9 @@ actor {
     let bufferContents = Buffer.toArray(createdContentDataBuffer);
     return bufferContents;
   };
+
+  public func clearAllPosts() : async () {
+    createdContentDataBuffer := Buffer.Buffer<FormData>(10);
+  };
+
 };
