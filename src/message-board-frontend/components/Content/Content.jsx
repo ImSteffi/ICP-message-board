@@ -1,15 +1,20 @@
-import Post from './Post.jsx'
+import React from "react";
+import Post from "./Post.jsx";
 
-function Content() {
-    return (
-        <div className="content">
-            <Post 
-            title="Example Post Title" 
-            category="News" 
-            imageSrc="/images/Capture.PNG"
-            />
-        </div>
-    );
+function Content({ posts }) {
+  return (
+    <div className="content">
+      {posts.map((post, index) => (
+        <Post
+          key={index}
+          title={post.title}
+          description={post.description}
+          content={post.content}
+          category={post.category}
+        />
+      ))}
+    </div>
+  );
 }
 
 export default Content;
