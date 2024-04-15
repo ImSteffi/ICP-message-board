@@ -63,7 +63,7 @@ function CreateContentForm({ deployNewPost, hasPosts }) {
 
   const handleDeleteAll = async () => {
     try {
-      await canister.clearAllPosts();
+      await canister.removeAllPosts();
       deployNewPost();
     } catch (error) {
       console.error("Error deleting all posts:", error);

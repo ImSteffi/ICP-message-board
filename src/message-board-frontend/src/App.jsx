@@ -15,12 +15,21 @@ function App() {
           title: post.title,
           description: post.description,
           content: post.content,
-          category: post.category
+          category: post.category,
         }))
         .reverse();
       setPosts(reversedPosts);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
+    }
+  };
+
+  const deletePost = async (index) => {
+    try {
+      await canister.removePost(index);
+      fetchPosts();
+    } catch (error) {
+      console.error("Failed to delete post:", error);
     }
   };
 
@@ -31,8 +40,11 @@ function App() {
   return (
     <main>
       <Navbar />
-      <CreateContentForm deployNewPost={fetchPosts} hasPosts={posts.length > 0 }/>
-      <Content posts={posts} />
+      <CreateContentForm
+        deployNewPost={fetchPosts}
+        hasPosts={posts.length > 0}
+      />
+      <Content posts={posts} onDeletePost={deletePost} />
     </main>
   );
 }
