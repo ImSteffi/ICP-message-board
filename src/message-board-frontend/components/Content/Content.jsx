@@ -1,17 +1,18 @@
 import React from "react";
 import Post from "./Post.jsx";
 
-function Content({ posts, onDeletePost }) {
+function Content({ posts, onEditPost, onDeletePost }) {
   return (
-    <div className="content">
+    <div className="content" key={posts.length}>
       {posts.map((post, index) => (
         <Post
-          key={index}
+          key={post.id}
           index={index}
           title={post.title}
           description={post.description}
           content={post.content}
           category={post.category}
+          onEdit={onEditPost}
           onDelete={onDeletePost}
         />
       ))}

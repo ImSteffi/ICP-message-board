@@ -24,9 +24,24 @@ function App() {
     }
   };
 
-  const deletePost = async (index) => {
+  const editPost = async (frontendIndex, newPostData) => {
+    const backendIndex = posts.length - 1 - frontendIndex;
     try {
-      await canister.removePost(index);
+      const success = await canister.editPost(backendIndex, newPostData);
+      if (success) {
+        fetchPosts();
+      } else {
+        console.error("Failed to edit post: Post not found");
+      }
+    } catch (error) {
+      console.error("Failed to edit post:", error);
+    }
+  };
+  
+  const deletePost = async (frontendIndex) => {
+    const backendIndex = posts.length - 1 - frontendIndex;
+    try {
+      await canister.removePost(backendIndex);
       fetchPosts();
     } catch (error) {
       console.error("Failed to delete post:", error);
@@ -44,7 +59,7 @@ function App() {
         deployNewPost={fetchPosts}
         hasPosts={posts.length > 0}
       />
-      <Content posts={posts} onDeletePost={deletePost} />
+      <Content posts={posts} onEditPost={editPost} onDeletePost={deletePost} />
     </main>
   );
 }
