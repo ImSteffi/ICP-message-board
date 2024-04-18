@@ -1,4 +1,5 @@
 import Text "mo:base/Text";
+import Nat "mo:base/Nat";
 import Buffer "mo:base/Buffer";
 
 actor {
@@ -12,8 +13,7 @@ actor {
   var createdContentDataBuffer : Buffer.Buffer<FormData> = Buffer.Buffer<FormData>(10);
 
   public query func getFormData() : async [FormData] {
-    let bufferContents = Buffer.toArray(createdContentDataBuffer);
-    return bufferContents;
+    return Buffer.toArray(createdContentDataBuffer);
   };
 
   public func addFormData(newData : FormData) : async () {
@@ -32,5 +32,34 @@ actor {
   public func removeAllPosts() : async () {
     createdContentDataBuffer.clear();
   };
+
+  //
+
+  // creates a new buffer
+  let book = Buffer.Buffer<Text>(11);
+  
+  // size()
+  public func getBookBufferSize() : async Nat {
+    return book.size();
+  };
+
+  // add()
+  public func addValueToBookBuffer(val: Text) : async () {
+    book.add(val);
+  };
+
+  // get()
+  public func getBookValues() : async [Text] {
+    return Buffer.toArray(book);
+  };
+
+  //getOpt() - Safely access elements in data structure without receiving ERROR
+  // public func getOptValue(index: Nat) : async ?Text {
+  //   if (index < book.size()) {
+  //     return ?("Book size: " # Nat.toText(book.size()) # " | Index req: " # Nat.toText(index));
+  //   } else {
+  //     return ?("Error");
+  //   }
+  // } 
 
 };

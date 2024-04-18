@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import CreateContentForm from "../components/Content/CreateContent.jsx";
 import Content from "../components/Content/Content.jsx";
+import BufferClass from "../components/Buffer/Buffer.jsx"
 import { message_board_backend as canister } from "../../declarations/message-board-backend";
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
         hasPosts={posts.length > 0}
       />
       <Content posts={posts} onEditPost={editPost} onDeletePost={deletePost} />
+      <BufferClass />
     </main>
   );
 }
