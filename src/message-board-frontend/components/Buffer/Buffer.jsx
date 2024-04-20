@@ -7,15 +7,18 @@ function BufferClass() {
   const [getOptTrueValue, setGetOptTrue] = useState([]);
   const [getOptFalseValue, setGetOptFalse] = useState([]);
   const [putValue, setPutValue] = useState([]);
+  const [removeLastValue, setRemoveLastValue] = useState([]);
+  const [capacityAmount, setCapacityAmount] = useState(null);
+  const [reserveAmount, setReserveAmount] = useState(null);
 
   const get = async () => {
-    const newSize = await canister.getBookBufferSize();
-    setSize(Number(newSize));
+    const res = await canister.getBookBufferSize();
+    setSize(Number(res));
   };
 
   const fetchBookValues = async () => {
-    const values = await canister.getBookValues();
-    setBookValues(values);
+    const res = await canister.getBookValues();
+    setBookValues(res);
   };
 
   const add = async () => {
@@ -25,13 +28,13 @@ function BufferClass() {
 
   const getOptTrue = async () => {
     const index = await canister.getBookBufferSize();
-    const getOptValue = await canister.getOptValue(index);
-    setGetOptTrue(getOptValue);
+    const res = await canister.getOptValue(index);
+    setGetOptTrue(res);
   };
 
   const getOptFalse = async () => {
-    const getOptValue = await canister.getOptValue(999999);
-    setGetOptFalse(getOptValue);
+    const res = await canister.getOptValue(999999);
+    setGetOptFalse(res);
   };
 
   const put = async () => {
@@ -41,9 +44,45 @@ function BufferClass() {
       index--;
     }
     const x = "bookChange";
-    const pushPut = await canister.putBookValue(index, x);
-    setPutValue(pushPut);
+    const res = await canister.putBookValue(index, x);
+    setPutValue(res);
   };
+
+  const removeLast = async () => {
+    const res = await canister.removeLastBookValue();
+    setRemoveLastValue(res);
+  };
+  
+  const remove = async (index) => {
+    const res = await canister.removeBookValue(index);
+    fetchBookValues();
+  };
+
+  const clearBook = async () => {
+    await canister.clearBook();
+    fetchBookValues();
+  };
+
+  const filterEntries = async () => {
+    await canister.filterBookEntries();
+  };
+
+  const capacity = async () => {
+    let res = await canister.getBookCapacity();
+    res = Number(res);
+    setCapacityAmount(res); 
+  };
+
+  const reserve = async () => {
+    const x = 20;
+    let res = await canister.reserveBookCapacity(x);
+    res = Number(res);
+    setReserveAmount(res);
+  };
+
+  useEffect(() => {
+    fetchBookValues();
+  });
 
   return (
     <main>
@@ -73,7 +112,54 @@ function BufferClass() {
         <h2>put</h2>
         <p>Overwrites at index</p>
         <h3>Book X &rarr; {putValue}</h3>
-        <button onClick={put}>Change BookX -&rarr; BookChange</button>
+        <button onClick={put}>put() Change BookX -&rarr; BookChange</button>
+      </div>
+      <hr></hr>
+      <div>
+        <h2>removeLast</h2>
+        <p>Removes and returns the last item in the buffer or `null` if the buffer is empty</p>
+        <h3>{removeLastValue}</h3>
+        <button onClick={removeLast}>removeLast()</button>
+      </div>
+      <hr></hr>
+      <div>
+        <h2>remove</h2>
+        <p>Removes and returns the element at `index` from the buffer</p>
+        {bookValues.map((value, index) => (
+          <div key={index}>
+            <h3>{value} | i: {index}</h3>
+            <button onClick={() => remove(index)}>remove() | i: {index}</button>
+          </div>
+        ))}
+      </div>
+      <hr></hr>
+      <div>
+        <h2>clear</h2>
+        <p>Resets the buffer</p>
+        <h3>{bookValues}</h3>
+        <button onClick={clearBook}>clear()</button>
+      </div>
+      <hr></hr>
+      <div>
+        <h2>filterEntries</h2>
+        <p>Filtering method for REMOVING data collections</p>
+        <p>Scenarios where you need to conditionally REMOVE elements based on certain criteria</p>
+        <button onClick={filterEntries}>filterEntries()</button>
+        <p>Creates 10 books then checks if index is even</p>
+      </div>
+      <hr></hr>
+      <div>
+        <h2>capacity</h2>
+        <p>Returns the capacity of the buffer (the length of the underlying array)</p>
+        <h3>{capacityAmount}</h3>
+        <button onClick={capacity}>capacity()</button>
+      </div>
+      <hr></hr>
+      <div>
+        <h2>reserve</h2>
+        <p>Changes the capacity to X</p>
+        <h3>Capacity amount: {capacityAmount} | Changed to: {reserveAmount}</h3>
+        <button onClick={reserve}>reserve()</button>
       </div>
     </main>
   );

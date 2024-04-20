@@ -41,7 +41,7 @@ actor {
 
   // size()
   public func getBookBufferSize() : async Nat {
-    return book.size();
+    book.size();
   };
 
   // add()
@@ -63,10 +63,53 @@ actor {
     };
   };
 
-  // put
+  // put()
   public func putBookValue(index : Nat, x : Text) : async (Text) {
     book.put(index, x);
     return book.get(index);
+  };
+
+  // removeLast()
+  public func removeLastBookValue() : async ?Text {
+    book.removeLast();
+  };
+
+  // remove()
+  public func removeBookValue(index: Nat) : async Text {
+    book.remove(index);
+  };
+
+  // clear()
+  public func clearBook() : async () {
+    book.clear();
+  };
+
+  /* filterEntries() - Filtering method for REMOVING data collections. 
+                       Scenarios where you need to conditionally REMOVE elements based on certain criteria */
+  public func filterBookEntries() : async () {
+    book.add("Entry 0");
+    book.add("Entry 1");
+    book.add("Entry 2");
+    book.add("Entry 3");
+    book.add("Entry 4");
+    book.add("Entry 5");
+    book.add("Entry 6");
+    book.add("Entry 7");
+    book.add("Entry 8");
+    book.add("Entry 9");
+    book.add("Entry 10");
+    book.filterEntries(func (index, _) = index % 2 == 0);
+  };
+
+  // capacity() - Returns the capacity of the buffer (the length of the underlying array)
+  public func getBookCapacity() : async Nat {
+    book.capacity();
+  };
+
+  // reserve() - changes the capacity to X
+  public func reserveBookCapacity(x : Nat) : async Nat {
+    book.reserve(x);
+    book.capacity();
   };
 
 };
